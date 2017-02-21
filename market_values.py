@@ -1,3 +1,13 @@
+'''
+Author: Jordan Ott
+Date: February 21th, 2017
+Description: This module uses the yahoo finance API to get the 5 days of stock value following the companies appearance
+on the top gainers/losers list
+Requirements: 
+	yahoo finance API
+	pandas
+	sqlite3
+'''
 from yahoo_finance import Share
 from datetime import datetime
 from pandas.tseries.offsets import BDay
@@ -65,5 +75,6 @@ def update():
 	pass
 
 insert_to_db('decliners.csv',"decliners")
+insert_to_db('gainers.csv',"gainers")
 
 conn.close()
