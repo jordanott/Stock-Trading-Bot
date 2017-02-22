@@ -18,11 +18,7 @@ from selenium import webdriver
 gainers   = ["http://online.wsj.com/mdc/public/page/2_3021-gainnyse-gainer-",".html?mod=mdc_pastcalendar"]
 decliners = ["http://online.wsj.com/mdc/public/page/2_3021-losenyse-loser-",".html?mod=mdc_pastcalendar"]
 
-driver = webdriver.Firefox()
-gainers_file = open("gainers.csv",'w')
-decliners_file = open("decliners.csv",'w')
-
-def build_url(days_since_current,stock_movement):
+def build_past_url(days_since_current,stock_movement):
 	today = pd.datetime.today()
 	past_date = today - BDay(days_since_current)
 	date = past_date.strftime('%Y%m%d')
@@ -48,13 +44,27 @@ def scrape_table(data_file,url,date):
 		data_file.write(line)
 	
 # 150 for last 150 business days
+'''
 for num in range(1,150):
-	gainers_url,date = build_url(num,gainers)
-	decliners_url,date = build_url(num,decliners)
+	gainers_url,date = build_past_url(num,gainers)
+	decliners_url,date = build_past_url(num,decliners)
 	scrape_table(gainers_file,gainers_url,date)
 	scrape_table(decliners_file,decliners_url,date)
 	print(num)
+'''
+def get_daily():
+	driver = webdriver.Firefox()
 
-gainers_file.close()
-decliners_file.close()
-driver.quit()
+	gainers_file = open("gainers.csv",'w')
+	decliners_file = open("decliners.csv",'w')
+	
+	gainers_url = "http://online.wsj.com/mdc/public/page/2_3021-gainnyse-gainer.html"
+	decliners_url = "http://online.wsj.com/mdc/public/page/2_3021-losenyse-loser.html"
+	date = pd.datetime.today().strftime('%Y%m%d')
+
+	scrape_table(gainers_file,gainers_url,date)
+	scrape_table(decliners_file,decliners_url,date)
+
+	gainers_file.close()
+	decliners_file.close()
+	driver.quit()
